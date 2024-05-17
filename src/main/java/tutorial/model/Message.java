@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +17,7 @@ import lombok.ToString;
 public class Message {
     @JsonProperty
     private String content;
+
+    @JsonProperty
+    private LocalDateTime timestamp = LocalDateTime.now();
 }

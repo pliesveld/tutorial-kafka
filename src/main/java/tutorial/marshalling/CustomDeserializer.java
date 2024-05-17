@@ -10,10 +10,11 @@ import java.util.Map;
 
 @Log4j2
 public class CustomDeserializer implements Deserializer<Message> {
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper(); // TODO: can dependency injection be used to @Autowired from spring context?
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
+        objectMapper.findAndRegisterModules();
     }
 
     @Override
@@ -26,6 +27,7 @@ public class CustomDeserializer implements Deserializer<Message> {
             log.debug("Deserializing...");
             return objectMapper.readValue(new String(data, "UTF-8"), Message.class);
         } catch (Exception e) {
+            log.error(e);
             throw new SerializationException("Error when deserializing byte[] to MessageDto");
         }
     }

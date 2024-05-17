@@ -25,6 +25,7 @@ import tutorial.marshalling.CustomSerializer;
 import tutorial.model.Message;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -33,14 +34,9 @@ import java.util.Properties;
 @ShellComponent
 public class Application {
 
-    @ShellMethod
-    public String hi() {
-        return "hi";
-    }
-
     String bootstrapServers = "127.0.0.1:9092";
 
-    @ShellMethod
+    @ShellMethod("Change target Kafka server at runtime")
     public String server(
     @ShellOption(defaultValue = "127.0.0.1:9092") String arg
     ) {
@@ -48,11 +44,11 @@ public class Application {
         return bootstrapServers;
     }
 
-    String groupId = "my-fourth-application";
-    String topic = "demo_java";
+    String groupId = "my-fourth-application"; // TODO: move to spring boot property
+    String topic = "demo_java"; // TODO: move to spring boot property
 
 
-    @ShellMethod
+    @ShellMethod("Publish Message to Kafka queue")
     public String write() {
 
 
@@ -67,7 +63,10 @@ public class Application {
         KafkaProducer<String, Message> producer = new KafkaProducer<>(properties);
 
         ProducerRecord<String, Message> producerRecord =
-                new ProducerRecord<>(topic, Message.builder().content("hello world").build());
+                new ProducerRecord<>(topic, Message.builder()
+                        .content("hello world")
+                        .timestamp(LocalDateTime.now())
+                        .build());
 
         // send data - asynchronous
         producer.send(producerRecord, new Callback() {
@@ -91,11 +90,11 @@ public class Application {
         // flush and close producer
         producer.close();
 
-        return "ok";
+        return "success";
     }
 
 
-    @ShellMethod
+    @ShellMethod("Subscribe to Kafka topic for 10 seconds and print messages")
     public String read() {
 
 
@@ -108,11 +107,12 @@ public class Application {
 //        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true"); // manual committing for strong message delivery guarentees
+        properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true"); // TODO: offload processing dedicated thread to allow loop to poll for messages and use manual committing for strong message delivery guarentees
+        properties.setProperty(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "1000");
         properties.setProperty(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
+        KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(properties);
 
         log.debug("Listing topics:");
         consumer.listTopics().keySet().forEach(log::debug);
@@ -125,11 +125,11 @@ public class Application {
         int i = 1;
 
         while(true) {
-            ConsumerRecords<String, String> records =
+            ConsumerRecords<String, Message> records =
                     consumer.poll(Duration.ofMillis(500));
 
-            log.info(records.count());
-            for (ConsumerRecord<String, String> record : records) {
+            log.info("poll event: records count = {}", records.count());
+            for (ConsumerRecord<String, Message> record : records) {
                 log.info("Key: " + record.key() + ", Value: " + record.value());
                 log.info("Partition: " + record.partition() + ", Offset:" + record.offset());
             }
@@ -138,7 +138,7 @@ public class Application {
         }
 
         consumer.close(Duration.ofMillis(2000));
-        return "ok";
+        return "success";
 
     }
 
