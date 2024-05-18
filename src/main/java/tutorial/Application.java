@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import scala.util.control.Exception;
 import tutorial.marshalling.CustomDeserializer;
 import tutorial.marshalling.CustomSerializer;
 import tutorial.model.Message;
@@ -38,7 +39,7 @@ public class Application {
 
     @ShellMethod("Change target Kafka server at runtime")
     public String server(
-    @ShellOption(defaultValue = "127.0.0.1:9092") String arg
+    @ShellOption(value = "arg", defaultValue = "127.0.0.1:9092") String arg
     ) {
         bootstrapServers = arg;
         return bootstrapServers;
@@ -49,7 +50,7 @@ public class Application {
 
 
     @ShellMethod("Publish Message to Kafka queue")
-    public String write() {
+    public String write( @ShellOption(value = "message", defaultValue = "hello world") String message) {
 
 
         // create Producer properties
@@ -64,7 +65,7 @@ public class Application {
 
         ProducerRecord<String, Message> producerRecord =
                 new ProducerRecord<>(topic, Message.builder()
-                        .content("hello world")
+                        .content(message)
                         .timestamp(LocalDateTime.now())
                         .build());
 
