@@ -1,0 +1,31 @@
+---
+- name: Copy tutorial-kafka-consumer service
+  copy:
+    src: consumer/
+    dest: "{{project.install_dir}}"
+    remote_src: false
+    force: true
+  notify: reload systemd daemon
+  register: result
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: result
+    verbosity: 2
+
+#- name: verify
+#  systemd:
+#    name: tutorial-kafka
+#    daemon_reexec: true
+#    daemon_reload: true
+#    scope: system
+
+- name: Checking file copied over
+  stat:
+    path: "{{project.install_dir}}/main.py"
+  register: lt
+- debug:
+    msg: "is defined"
+  when: lt.stat.exists == True
+
+

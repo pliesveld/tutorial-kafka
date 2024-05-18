@@ -1,0 +1,21 @@
+[Unit]
+Description=A sample project {{project.name}}
+After=multi-user.target
+#After=pulseaudio.service
+After=ssh.service
+After=syslog.target
+After=network.target
+#Requires=pulseaudio.service
+Requires=ssh.service
+
+[Service]
+ExecStart=/bin/bash {{project.install_dir}}/run.sh --pid /tmp/{{project.name}}.pid
+Type=forking
+PIDFile=/tmp/{{project.name}}.pid
+# Restart=always
+Restart=no
+RestartSec=800ms
+StartLimitIntervalSec=0
+
+[Install]
+WantedBy=default.target

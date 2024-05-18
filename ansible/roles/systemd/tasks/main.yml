@@ -1,0 +1,22 @@
+---
+- name: Install systemd unit file in maintainer
+  template:
+    src: unit.j2
+    dest: "/usr/lib/systemd/system/{{project.name}}.service"
+  notify: reload systemd daemon
+
+- name: Install systemd unit file
+  template:
+    src: unit.j2
+    dest: "/etc/systemd/system/{{project.name}}.service"
+  notify: reload systemd daemon
+
+- name: Checking file copied over
+  stat:
+    path: "/etc/systemd/system/{{project.name}}.service"
+  register: lt
+- debug:
+    msg: "is defined"
+  when: lt.stat.exists == True
+
+
