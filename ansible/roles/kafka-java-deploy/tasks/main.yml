@@ -1,0 +1,52 @@
+---
+- name: Install tutorial-kafka.jar
+  copy:
+    src: ../target/tutorial-kafka.jar
+    dest: "{{project.install_dir}}"
+    remote_src: false
+    force: true
+  notify: reload systemd daemon
+  register: result
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: result
+    verbosity: 2
+
+#- name: verify
+#  systemd:
+#    name: tutorial-kafka
+#    daemon_reexec: true
+#    daemon_reload: true
+#    scope: system
+
+- name: Checking file copied over
+  stat:
+    path: "{{project.install_dir}}/tutorial-kafka.jar"
+  register: lt
+- debug:
+    msg: "is defined"
+  when: lt.stat.exists == True
+
+
+- name: Install systemd unit file in maintainer
+  template:
+    src: unit.j2
+    dest: "/usr/lib/systemd/system/{{project.name}}.service"
+  notify: reload systemd daemon
+
+- name: Install systemd unit file
+  template:
+    src: unit.j2
+    dest: "/etc/systemd/system/{{project.name}}.service"
+  notify: reload systemd daemon
+
+- name: Checking file copied over
+  stat:
+    path: "/etc/systemd/system/{{project.name}}.service"
+  register: lt
+- debug:
+    msg: "is defined"
+  when: lt.stat.exists == True
+
+

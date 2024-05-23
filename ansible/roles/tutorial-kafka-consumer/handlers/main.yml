@@ -1,8 +1,0 @@
----
-# Handler for restarting deployment
-- name: Systemd configuration files have changed
-  listen: reload systemd daemon
-  systemd:
-    daemon_reload: true
-    daemon_reexec: true
-

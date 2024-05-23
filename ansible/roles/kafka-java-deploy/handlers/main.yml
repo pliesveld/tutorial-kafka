@@ -1,0 +1,13 @@
+---
+# Handler for restarting deployment
+- name: Systemd configuration files have changed
+  listen: reload systemd daemon
+  systemd: daemon_reload=true
+
+- name: Stop service
+  listen: reload systemd daemon
+  systemd: name={{project.name}}.service state=stopped
+
+- name: Start service
+  listen: reload systemd daemon
+  systemd: name={{project.name}}.service state=started

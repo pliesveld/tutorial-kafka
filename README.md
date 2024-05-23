@@ -8,9 +8,14 @@ Start Kafka, Zookeeper, and kafdrop
 
     docker-compose up -d
 
-## Java - Sping Boot Shell
 
-Interactive shell for reading and writing to the kafka 
+## Kafdrop
+
+Navigate to http://localhost:9000/ to view the topics, partitions, and payload
+
+## Tutorial Shell
+
+Interactive shell for staging test data and invoking the various examples. 
 
 launch with:
 
@@ -19,8 +24,7 @@ launch with:
 
 At the prompt, run `help` for a list of available commands.
 
-## Kafdrop
+## Deployment
 
-    Navigate to http://localhost:9000 to view the topics, partitions, and payload
-
+Ansible playbooks are used to stage and deploy the various examples. See [./ansible/](./ansible/) for more details.   
 

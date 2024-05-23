@@ -24,7 +24,6 @@ public class CustomDeserializer implements Deserializer<Message> {
                 log.warn("Null received at deserializing");
                 return null;
             }
-            log.debug("Deserializing...");
             return objectMapper.readValue(new String(data, "UTF-8"), Message.class);
         } catch (Exception e) {
             log.error(e);

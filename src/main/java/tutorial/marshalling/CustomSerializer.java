@@ -25,7 +25,6 @@ public class CustomSerializer implements Serializer<Message> {
                 log.debug("Null received at serializing");
                 return null;
             }
-            log.debug("Serializing...");
             return objectMapper.writeValueAsBytes(data);
         } catch (Exception e) {
             log.error(e);

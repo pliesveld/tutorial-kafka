@@ -1,5 +1,12 @@
+---
 # The global variable file
-#
-project: 'helloworld'
+# provides default values for variables that can be overridden in playbooks
+project:
+  name: tutorial-kafka
+  install_dir: /home/pi/projects/tutorial-kafka/
 
+systemd_service_restart: no
 
+jvm_args: -Xms256m -Xmx256m
+shell_args: ''
+group: all

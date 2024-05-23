@@ -1,0 +1,10 @@
+---
+- hosts: pi8:pi9:pi5
+  strategy: free
+  become: yes
+  remote_user: pi
+  vars:
+    command: example1_consumer
+    shell_args: --group {group}
+  roles:
+  - kafka-java-deploy
