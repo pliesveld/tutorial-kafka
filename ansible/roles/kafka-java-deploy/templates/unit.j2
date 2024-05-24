@@ -9,7 +9,7 @@ Requires=pulseaudio.service
 #Requires=ssh.service
 
 [Service]
-ExecStart=/usr/bin/java {{jvm_args}} -jar {{project.install_dir}}/tutorial-kafka.jar {{command}} {{shell_args}}
+ExecStart=/usr/bin/java {{jvm_args}} {{launch_args}} -jar {{project.install_dir}}/tutorial-kafka.jar {{command}} {{shell_args}}
 Type=simple
 Restart={{systemd_service_restart}}
 RestartSec=10800ms

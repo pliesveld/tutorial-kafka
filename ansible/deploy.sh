@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ansible-playbook example1.yml
+ansible-playbook example2_group.yml

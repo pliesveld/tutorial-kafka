@@ -9,4 +9,5 @@ systemd_service_restart: no
 
 jvm_args: -Xms256m -Xmx256m
 shell_args: ''
+launch_args: ''
 group: all

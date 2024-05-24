@@ -127,11 +127,11 @@
         </dependency>
 
         <!-- text-to-speech -->
-        <dependency>
-            <groupId>com.harium.hci</groupId>
-            <artifactId>espeak</artifactId>
-            <version>1.0.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.harium.hci</groupId>-->
+<!--            <artifactId>espeak</artifactId>-->
+<!--            <version>1.0.3</version>-->
+<!--        </dependency>-->
 
 
         <!--            &lt;!&ndash; Override dependencies provided by Spring Boot &ndash;&gt;-->

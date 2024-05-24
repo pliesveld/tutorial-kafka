@@ -1,20 +1,8 @@
 package tutorial;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration;
@@ -25,17 +13,7 @@ import org.springframework.shell.boot.ShellRunnerAutoConfiguration;
 import org.springframework.shell.boot.StandardCommandsAutoConfiguration;
 import org.springframework.shell.boot.TerminalUIAutoConfiguration;
 import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
 import tutorial.config.BrokerConfig;
-import tutorial.marshalling.CustomDeserializer;
-import tutorial.marshalling.CustomSerializer;
-import tutorial.model.Message;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Properties;
 
 @Log4j2
 //@SpringBootApplication

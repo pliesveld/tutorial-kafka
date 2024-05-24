@@ -1,0 +1,34 @@
+---
+# Single producer, Two Consumers in different groups
+
+- hosts: pi8
+  strategy: free
+  become: yes
+  remote_user: pi
+  vars:
+    command: example2_consumer
+    shell_args: --topic example2 --group group_pi8 # --max_poll_records 3
+  roles:
+  - kafka-java-deploy
+
+- hosts: pi9
+  strategy: free
+  become: yes
+  remote_user: pi
+  vars:
+    command: example2_consumer
+    shell_args: --topic example2 --group group_pi9
+    launch_args: -Despeak.amplitude=20 -Despeak.speed=275
+  roles:
+  - kafka-java-deploy
+
+- hosts: pi5
+  strategy: free
+  become: yes
+  remote_user: pi
+  vars:
+    command: example2_producer
+    shell_args: --topic example2 --message 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+    systemd_service_restart: no
+  roles:
+  - kafka-java-deploy
